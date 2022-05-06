@@ -87,19 +87,24 @@ if uploaded_files != []:
      A=list(set(table.origin_area_id) & set(table2.origin_area_id))
      B=list(set(table.destination_area_id) & set(table2.destination_area_id))
      table_match=df[df['origin_area_id'].isin(A) & df['destination_area_id'].isin(B)]
-     st.write(table_match)
-     def convert_df(df):
-     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-          return df.to_csv().encode('utf-8')
-     csv = convert_df(table_match)
+     if len(table_match)==0:
+          st.caption('No matched record')
+     else:
+          st.write(table_match)
+          summary1=table_match['count'].sum()
+          st.write("Sum: ",summary1)
+          def convert_df(df):
+          # IMPORTANT: Cache the conversion to prevent computation on every rerun
+               return df.to_csv().encode('utf-8')
+          csv = convert_df(table_match)
 
-     st.download_button(
-          "Press to Download CSV",
-          csv,
-          "OD_Selection_Matched.csv",
-          "text/csv",
-          key='download-csv'
-          )
+          st.download_button(
+               "Press to Download CSV",
+               csv,
+               "OD_Selection_Matched.csv",
+               "text/csv",
+               key='download-csv'
+               )
      
      #st.write(table2[table2.destination_area_id.isin(table['destination_area_id'])])
      st.markdown("""---""")
