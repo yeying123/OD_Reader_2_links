@@ -33,12 +33,11 @@ title2 = st.sidebar.text_input('Remix Link (D):', 'Copy URL')
 
 if uploaded_files == []:
      st.write('no csv found')
-ID=0
-ID2=0
      
 # Read IDs in the link
 if title1 == 'Copy URL' or len(title1)==0:
      st.write('OD-Origin URL needed')
+     ID=0
 elif title1.find("od=destination")>0:
      st.write('Step 3.1 OD-Origin URL needed' )
 else:
@@ -49,6 +48,7 @@ else:
 
 if title2=='Copy URL' or len(title2)==0:
      st.write('OD-Destination URL needed')
+     ID2=0
 elif title2.find("od=origin")>0:
           st.write('Step 3.2 OD-Distination URL needed ' )
 else:
