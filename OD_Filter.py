@@ -61,7 +61,7 @@ for i in uploaded_files:
 
 if uploaded_files != []:
      ######--------------------------------- Section 1: Matched Pair --------------------------------######
-     if ID!=0 and ID2!=0:
+     if (ID!=0) and (ID2!=0):
           st.header('Matched Pair')
 
      # create empty dataframe (table)
