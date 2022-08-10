@@ -45,7 +45,7 @@ elif title1.find("od=destination")>0:
 else:
      from_='origin_area_id'
      to_='destination_area_id'
-     ID_start=title1.find("od=origin")
+     ID_start=title1.find("od=origin")+7
      ID=title1[ID_start:]
 
 if title2=='destination=' or len(title2)==0:
@@ -56,7 +56,7 @@ elif title2.find("od=origin")>0:
 else:
      from_2='destination_area_id'
      to_2='origin_area_id'
-     ID_start2=title2.find("destination=")
+     ID_start2=title2.find("destination=")+12
      ID2=title2[ID_start2:]
      
 if uploaded_files != [] and ID!=0 and ID2!=0:
