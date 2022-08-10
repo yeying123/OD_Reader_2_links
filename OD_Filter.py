@@ -18,7 +18,7 @@ st.sidebar.title('OD Selection from Remix')
 st.sidebar.subheader('Step 1: Upload the OD data file (with all OD pairs)')
 st.sidebar.caption('Make sure the csv file with these columns (in lowercase): "origin_area_id", "destination_area_id", and "count" ')
 st.sidebar.caption('Note: one file only')
-uploaded_files = st.sidebar.file_uploader('Upload a CSV file', accept_multiple_files=True, type=['csv'])
+uploaded_file = st.sidebar.file_uploader('Upload a CSV file', accept_multiple_files=False, type=['csv'])
 
 # Ask to specify delimiter
 st.sidebar.subheader('Step 2: Specify csv file delimiter')
@@ -31,10 +31,12 @@ title1 = st.sidebar.text_input('Copy Area IDs from Remix:','origin=')
 st.sidebar.subheader('Step 3.2: Remix OD Layer - Destination')
 title2 = st.sidebar.text_input('Copy Area IDs from Remix:','destination=')
 
-if uploaded_files == []:
+if uploaded_file is None:
      st.write('no csv found')
-for i in uploaded_files:
-     df=pd.read_csv(i,delimiter=delimit)
+else:
+     df=pd.read_csv(uploaded_file,delimiter=delimit)
+     df['origin_area_id']=df['origin_area_id'].astype(str) # account for the situation that each area_id could be either int or str
+     df['destination_area_id']=df['destination_area_id'].astype(str) # account for the situation that each area_id could be either int or str
 
 # Read IDs in the link
 if title1 == 'origin=' or len(title1)==0:
@@ -45,7 +47,7 @@ elif title1.find("od=destination")>0:
 else:
      from_='origin_area_id'
      to_='destination_area_id'
-     ID_start=title1.find("od=origin")+7
+     ID_start=title1.find("od=origin")+8
      ID=title1[ID_start:]
 
 if title2=='destination=' or len(title2)==0:
@@ -59,7 +61,7 @@ else:
      ID_start2=title2.find("destination=")+12
      ID2=title2[ID_start2:]
      
-if uploaded_files != [] and ID!=0 and ID2!=0:
+if uploaded_file is not None and ID!=0 and ID2!=0:
      ######--------------------------------- Section 1: Matched Pair --------------------------------######
      st.header('Matched Pair')
 
@@ -71,16 +73,14 @@ if uploaded_files != [] and ID!=0 and ID2!=0:
      if len(df.columns)==1:
           st.write('Make sure you have the right delimiter in Step 2')
      for t in ID_list:
-          if int(t) in df[from_].values:
-               number=int(t)
-               df1=df.loc[df[from_]==number]
+          if t in df[from_].values:
+               df1=df.loc[df[from_]==t]
                table=table.append(df1)
 
      ID_list2=ID2.split(",")
      for t in ID_list2:
-          if int(t) in df[from_2].values:
-               number=int(t)
-               df_2=df.loc[df[from_2]==number]
+          if t in df[from_2].values:
+               df_2=df.loc[df[from_2]==t]
                table2=table2.append(df_2)
 
      A=list(set(table.origin_area_id) & set(table2.origin_area_id))
@@ -135,16 +135,14 @@ if uploaded_files != [] and ID!=0 and ID2!=0:
           st.subheader('OD Pair Summary')
           summary=0
           for t in ID_list:
-               if int(t) in table[from_].values:
-                    number=int(t)
+               if t in table[from_].values:
                     #st.write(t)
-                    df_new=table.loc[table[from_]==number]
+                    df_new=table.loc[table[from_]==t]
                     total=df_new['count'].sum()
-                    st.write("Total travel from ", from_, " ", number , "is: ", total)
+                    st.write("Total travel from ", from_, " ", t , "is: ", total)
                     summary+=total
                else:
-                    number=int(t)
-                    st.write("Total travel from ", from_, " ", number, "is: ", 'No matching record')
+                    st.write("Total travel from ", from_, " ", t, "is: ", 'No matching record')
           st.write("Sum: ",summary)
 
      st.markdown("""---""")
@@ -188,15 +186,13 @@ if uploaded_files != [] and ID!=0 and ID2!=0:
           st.subheader('OD Pair Summary')
           summary=0
           for t in ID_list2:
-               if int(t) in table2[from_2].values:
-                    number=int(t)
+               if t in table2[from_2].values:
                     #st.write(t)
-                    df_2=table2.loc[table2[from_2]==number]
+                    df_2=table2.loc[table2[from_2]==t]
                     total2=df_2['count'].sum()
-                    st.write("Total travel from ", from_2, " ", number , "is: ", total2)
+                    st.write("Total travel to ", from_2, " ", t , "is: ", total2)
                     summary+=total2
                else:
-                    number=int(t)
-                    st.write("Total travel from ", from_2, " ", number, "is: ", 'No matching record')
+                    st.write("Total travel to ", from_2, " ", t, "is: ", 'No matching record')
           st.write("Sum: ",summary)
 
