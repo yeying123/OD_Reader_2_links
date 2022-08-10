@@ -26,10 +26,10 @@ delimit=st.sidebar.text_input('Specify the Delimiter used in the csv file:', ';'
 
 # Input field to ask for Remix link to extract IDs
 st.sidebar.subheader('Step 3.1: Remix OD Layer - Origin')
-title1 = st.sidebar.text_input('Remix Link (O):', 'Copy URL')
+title1 = st.sidebar.text_input('Copy Area IDs from Remix:','origin=')
 
 st.sidebar.subheader('Step 3.2: Remix OD Layer - Destination')
-title2 = st.sidebar.text_input('Remix Link (D):', 'Copy URL')
+title2 = st.sidebar.text_input('Copy Area IDs from Remix:','destination=')
 
 if uploaded_files == []:
      st.write('no csv found')
@@ -37,26 +37,26 @@ for i in uploaded_files:
      df=pd.read_csv(i,delimiter=delimit)
 
 # Read IDs in the link
-if title1 == 'Copy URL' or len(title1)==0:
-     st.write('OD-Origin URL needed')
+if title1 == 'origin=' or len(title1)==0:
+     st.write('OD-Origin IDs needed')
      ID=0
 elif title1.find("od=destination")>0:
-     st.write('Step 3.1 OD-Origin URL needed' )
+     st.write('Step 3.1 OD-Origin IDs needed' )
 else:
      from_='origin_area_id'
      to_='destination_area_id'
-     ID_start=title1.find("od=origin")+10
+     ID_start=title1.find("od=origin")
      ID=title1[ID_start:]
 
-if title2=='Copy URL' or len(title2)==0:
-     st.write('OD-Destination URL needed')
+if title2=='destination=' or len(title2)==0:
+     st.write('OD-Destination IDs needed')
      ID2=0
 elif title2.find("od=origin")>0:
-          st.write('Step 3.2 OD-Distination URL needed ' )
+          st.write('Step 3.2 OD-Distination IDs needed ' )
 else:
      from_2='destination_area_id'
      to_2='origin_area_id'
-     ID_start2=title2.find("od=destination")+15
+     ID_start2=title2.find("destination=")
      ID2=title2[ID_start2:]
      
 if uploaded_files != [] and ID!=0 and ID2!=0:
@@ -113,7 +113,7 @@ if uploaded_files != [] and ID!=0 and ID2!=0:
      # create empty dataframe (table)
 
      st.header('Origin ID(s)')
-     st.write('The origin ID(s) extracted from the Remix URL: ',ID)
+     st.write('The origin ID(s) extracted from Remix: ',ID)
 
      col1, col2= st.columns((0.8,0.8))
      with col1:
@@ -152,7 +152,7 @@ if uploaded_files != [] and ID!=0 and ID2!=0:
      ######--------------------------------- Section 3:Destination ---------------------------------######
 
      st.header('Destination ID(s)')
-     st.write('The destination ID(s) extracted from the 2nd Remix URL: ',ID2)
+     st.write('The destination ID(s) extracted from Remix: ',ID2)
      #st.write(from_2)
      col3, col4= st.columns((0.8, 0.8))
      
