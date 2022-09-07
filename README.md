@@ -4,5 +4,5 @@ Small app that allows you to use OD layer URL from Remix to get the summary stat
 
 Deployed with [Streamlit](https://streamlit.io/). 
 
-You can take a look to the app [here.](https://share.streamlit.io/yeying123/od_reader_2_links/main/OD_Filter.py) 
+You can take a look to the app [here.](https://yeying123-od-reader-2-links-od-filter-20220907-3s879c.streamlitapp.com/) 
 
