@@ -22,14 +22,14 @@ uploaded_file = st.sidebar.file_uploader('Upload a CSV file', accept_multiple_fi
 
 # Ask to specify delimiter
 st.sidebar.subheader('Step 2: Specify csv file delimiter')
-delimit=st.sidebar.text_input('Specify the Delimiter used in the csv file:', ';')
+delimit=st.sidebar.text_input('Specify the Delimiter used in the csv file:', ',')
 
 # Input field to ask for Remix link to extract IDs
-st.sidebar.subheader('Step 3.1: Remix OD Layer - Origin')
-title1 = st.sidebar.text_input('Copy Area IDs from Remix:','origin=')
+st.sidebar.subheader('Step 3.1: Remix OD Layer - Destination')
+title2 = st.sidebar.text_input('Copy Area IDs from Remix:',placeholder='destination=')
 
-st.sidebar.subheader('Step 3.2: Remix OD Layer - Destination')
-title2 = st.sidebar.text_input('Copy Area IDs from Remix:','destination=')
+st.sidebar.subheader('Step 3.2: Remix OD Layer - Origin')
+title1 = st.sidebar.text_input('Copy Area IDs from Remix:',placeholder='origin=')
 
 if uploaded_file is None:
      st.write('no csv found')
@@ -39,27 +39,31 @@ else:
      df['destination_area_id']=df['destination_area_id'].astype(str) # account for the situation that each area_id could be either int or str
 
 # Read IDs in the link
-if title1 == 'origin=' or len(title1)==0:
+if len(title2)==0:
+     st.write('OD-Destination IDs needed')
+     ID2=0
+elif ("destination=" in title2) is False:
+     st.write('Step 3.1 OD-Distination IDs needed ' )
+     ID2=0     
+else:
+     from_2='destination_area_id'
+     to_2='origin_area_id'
+     ID_start2=title2.find("destination=")+12
+     ID2=title2[ID_start2:]
+
+if len(title1)==0:
      st.write('OD-Origin IDs needed')
      ID=0
-elif title1.find("od=destination")>0:
-     st.write('Step 3.1 OD-Origin IDs needed' )
+elif ("origin=" in title1) is False:
+     st.write('Step 3.2 OD-Origin IDs needed' )
+     ID=0
 else:
      from_='origin_area_id'
      to_='destination_area_id'
      ID_start=title1.find("od=origin")+8
      ID=title1[ID_start:]
 
-if title2=='destination=' or len(title2)==0:
-     st.write('OD-Destination IDs needed')
-     ID2=0
-elif title2.find("od=origin")>0:
-          st.write('Step 3.2 OD-Distination IDs needed ' )
-else:
-     from_2='destination_area_id'
-     to_2='origin_area_id'
-     ID_start2=title2.find("destination=")+12
-     ID2=title2[ID_start2:]
+
      
 if uploaded_file is not None and ID!=0 and ID2!=0:
      ######--------------------------------- Section 1: Matched Pair --------------------------------######
