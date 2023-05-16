@@ -35,8 +35,8 @@ if uploaded_file is None:
      st.write('no csv found')
 else:
      df=pd.read_csv(uploaded_file,delimiter=delimit)
-     df['origin_area_id']=df['origin_area_id'].astype(str) # account for the situation that each area_id could be either int or str
-     df['destination_area_id']=df['destination_area_id'].astype(str) # account for the situation that each area_id could be either int or str
+     #df['origin_area_id']=df['origin_area_id'].astype(str) # account for the situation that each area_id could be either int or str
+     #df['destination_area_id']=df['destination_area_id'].astype(str) # account for the situation that each area_id could be either int or str
 
 # Read IDs in the link
 if len(title2)==0:
